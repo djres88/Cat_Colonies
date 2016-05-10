@@ -1,0 +1,13 @@
+canvas {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#game-canvas {
+  background: url("../images/spaceblue.jpg");
+  height: 800px;
+  width: 95%;
+  justify-content: center;
+  align-items: center;
+}
