@@ -1,13 +1,33 @@
-canvas {
+body {
+  background-color: black;
+  font-family: fantasy;
+}
+
+.game {
   display: flex;
   justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  color: white;
+}
+
+h1 {
+  margin: 0;
 }
 
 #game-canvas {
   background: url("../images/spaceblue.jpg");
-  height: 800px;
-  width: 95%;
-  justify-content: center;
-  align-items: center;
+  width: 85%;
+  height: 85%;
+  border: 1px solid yellow;
+  margin: 0 auto;
+  min-width: 50%;
+}
+
+#space-cat {
+  height: 5%;
+  width: 3%;
+  position: absolute;
+  margin: 0 8%;
+  display: none;
 }

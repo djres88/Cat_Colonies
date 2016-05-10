@@ -1,10 +1,17 @@
 
 function MovingObject(hash) {
-  this.pos = hash['pos'];
-  this.vel = hash['vel'];
-  this.radius = hash['radius'];
-  this.color = hash['color'];
-  this.game = hash['game'];
+  this.pos = hash.pos;
+  this.vel = hash.vel;
+  this.game = hash.game;
+  this.rotation = hash.rotation;
+  this.lives = hash.lives;
+
+  if (hash.radius) {
+    this.radius = hash.radius;
+  }
+  if (hash.color) {
+    this.color = hash.color;
+  }
 }
 
 MovingObject.prototype.draw = function(ctx) {
@@ -21,6 +28,7 @@ MovingObject.prototype.draw = function(ctx) {
   );
   ctx.fill();
 };
+
 
 MovingObject.prototype.move = function() {
   this.pos[0] += this.vel[0];

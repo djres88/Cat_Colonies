@@ -3,8 +3,8 @@ var GameView = require("./javascripts/gameView.js");
 var M = require("./javascripts/movingObject.js");
 
 var canvasEl = document.getElementById("game-canvas");
+canvasEl.width = 1600;
 canvasEl.height = 800;
-canvasEl.width = 800;
 
 var newGame = new GameView();
 newGame.start(canvasEl);

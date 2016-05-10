@@ -5,7 +5,7 @@ var util = {};
 util.inherits = function (ChildClass, ParentClass) {
   function Surrogate() {}
   Surrogate.prototype = ParentClass.prototype;
-  ChildClass.prototype = new Surrogate;
+  ChildClass.prototype = new Surrogate();
   ChildClass.prototype.constructor = ChildClass;
 };
 
@@ -14,6 +14,5 @@ util.randomVec = function (length) {
   var y = Math.sqrt(length*length - x*x);
   return [x,y];
 };
-
 
 module.exports = util;

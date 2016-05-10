@@ -1,16 +1,18 @@
-var Asteroid = require("./asteroid.js");
+var Planet = require("./planet.js");
+var SpaceCat = require('./spaceCat.js');
 
 function Game() {
-  this.DIM_X = 800;
+  this.DIM_X = 1600;
   this.DIM_Y = 800;
   this.NUM_ASTEROIDS = 4;
   this.asteroids = [];
-  this.addAsteroids();
+  this.cat = new SpaceCat({pos: [800, 400], game: this});
+  this.addPlanets();
 }
 
-Game.prototype.addAsteroids = function() {
+Game.prototype.addPlanets = function() {
   for (var i = 0; i < this.NUM_ASTEROIDS; i++) {
-    var a = new Asteroid({pos: this.randomPosition(), game: this});
+    var a = new Planet({pos: this.randomPosition(), game: this});
     this.asteroids.push(a);
   }
 };
@@ -21,13 +23,14 @@ Game.prototype.draw = function (ctx) {
   this.asteroids.forEach(function(asteroid) {
     asteroid.draw(ctx);
   });
+  this.cat.draw(ctx);
 };
 
 Game.prototype.moveObjects = function () {
   this.asteroids.forEach(function(asteroid) {
     asteroid.move();
   });
-
+  // this.cat.move();
 };
 
 Game.prototype.randomPosition = function() {
@@ -37,7 +40,7 @@ Game.prototype.randomPosition = function() {
 };
 
 Game.prototype.wrap = function (pos) {
-  pos[0] = pos[0] % 800;
+  pos[0] = pos[0] % 1600;
   pos[1] = pos[1] % 800;
   return [pos[0], pos[1]];
 };
