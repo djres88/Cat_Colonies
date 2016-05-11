@@ -4,33 +4,32 @@ var SpaceCat = require('./spaceCat.js');
 function Game() {
   this.DIM_X = 1600;
   this.DIM_Y = 800;
-  this.NUM_ASTEROIDS = 4;
-  this.asteroids = [];
-  this.cat = new SpaceCat({pos: [800, 400], game: this});
+  this.NUM_ASTEROIDS = 8;
+  this.planets = [];
+  this.cat = new SpaceCat({game: this});
   this.addPlanets();
 }
 
 Game.prototype.addPlanets = function() {
   for (var i = 0; i < this.NUM_ASTEROIDS; i++) {
     var a = new Planet({pos: this.randomPosition(), game: this});
-    this.asteroids.push(a);
+    this.planets.push(a);
   }
 };
 
 Game.prototype.draw = function (ctx) {
   ctx.clearRect(0, 0, this.DIM_X, this.DIM_Y);
 
-  this.asteroids.forEach(function(asteroid) {
+  this.planets.forEach(function(asteroid) {
     asteroid.draw(ctx);
   });
-  this.cat.draw(ctx);
 };
 
 Game.prototype.moveObjects = function () {
-  this.asteroids.forEach(function(asteroid) {
+  this.planets.forEach(function(asteroid) {
     asteroid.move();
   });
-  // this.cat.move();
+  this.cat.move();
 };
 
 Game.prototype.randomPosition = function() {
@@ -40,8 +39,14 @@ Game.prototype.randomPosition = function() {
 };
 
 Game.prototype.wrap = function (pos) {
-  pos[0] = pos[0] % 1600;
-  pos[1] = pos[1] % 800;
+  if (pos[0] <= -50) {
+    pos[0] += 1650;
+  }
+  if (pos[1] <= -50) {
+    pos[1] += 850;
+  }
+  pos[0] = pos[0] % 1650;
+  pos[1] = pos[1] % 850;
   return [pos[0], pos[1]];
 };
 

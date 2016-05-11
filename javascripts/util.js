@@ -10,8 +10,23 @@ util.inherits = function (ChildClass, ParentClass) {
 };
 
 util.randomVec = function (length) {
-  var x = Math.random()*length;
-  var y = Math.sqrt(length*length - x*x);
+  var randomizeX = Math.random();
+  var randomizeY = Math.random();
+
+  // Randomize x/y direction of moving objects.
+  if (randomizeX <= 0.5) {
+    randomizeX = -1;
+  } else {
+    randomizeX = 1;
+  }
+  if (randomizeY <= 0.5) {
+    randomizeX = -1;
+  } else {
+    randomizeY = 1;
+  }
+
+  var x = Math.random()*length*randomizeX;
+  var y = Math.sqrt(length*length - x*x)*randomizeY;
   return [x,y];
 };
 

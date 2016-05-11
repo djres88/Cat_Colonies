@@ -1,4 +1,3 @@
-
 function MovingObject(hash) {
   this.pos = hash.pos;
   this.vel = hash.vel;
@@ -14,7 +13,7 @@ function MovingObject(hash) {
   }
 }
 
-MovingObject.prototype.draw = function(ctx) {
+MovingObject.prototype.draw = function(ctx) {  
   ctx.fillStyle = this.color;
   ctx.beginPath();
 
