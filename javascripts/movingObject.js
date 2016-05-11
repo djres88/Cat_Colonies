@@ -25,7 +25,19 @@ MovingObject.prototype.draw = function(ctx) {
     2 * Math.PI,
     false
   );
+  if (this.lives > 0) {
+    ctx.strokeStyle="red";
+  } else {
+    ctx.strokeStyle="green";
+  }
   ctx.fill();
+  var width = 3*this.lives;
+  if (width > 0) {
+    ctx.lineWidth=width;
+  } else {
+    ctx.lineWidth=0;
+  }
+  ctx.stroke();
 };
 
 MovingObject.prototype.move = function() {
@@ -39,11 +51,18 @@ MovingObject.prototype.move = function() {
 };
 
 MovingObject.prototype.hitBy = function(obj) {
+
   var distance = Math.sqrt(
-    Math.pow(this[0] - obj[0], 2) + Math.pow(this[0] - obj[0], 2)
+    Math.pow(this.pos[0] - obj.pos[0], 2) + Math.pow(this.pos[1] - obj.pos[1], 2)
   );
   // console.log(distance, this.radius+obj.radius);
   return distance < (this.radius + obj.radius);
+};
+
+MovingObject.prototype.damage = function() {
+  if (this.lives > 0) {
+    this.lives -= 1;
+  }
 };
 
 module.exports = MovingObject;

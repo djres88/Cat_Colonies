@@ -72,6 +72,8 @@
 	  this.DIM_X = 1600;
 	  this.DIM_Y = 800;
 	  this.NUM_ASTEROIDS = 5;
+	  this.won = false;
+	  this.sumPlanetLives = this.NUM_ASTEROIDS*3;
 	  this.planets = [];
 	  this.bullets = [];
 	  this.cat = new SpaceCat({game: this});
@@ -90,6 +92,10 @@
 	};
 	
 	Game.prototype.draw = function (ctx) {
+	  if (game.won) {
+	
+	  }
+	
 	  ctx.clearRect(0, 0, this.DIM_X, this.DIM_Y);
 	  this.planets.forEach(function(planet) {
 	    planet.draw(ctx);
@@ -118,19 +124,29 @@
 	
 	Game.prototype.logCollisions = function() {
 	  var game = this;
-	  game.planets.forEach(function(planet) {
-	    game.bullets.forEach(function(bullet) {
+	  this.sumPlanetLives = 0;
+	  game.planets.forEach(function(planet, planetIdx) {
+	    game.bullets.forEach(function(bullet, bulletIdx) {
 	      if (planet.hitBy(bullet)) {
-	        // TODO:
-	        // planet.assessDamage();
-	        alert("Bullet struck planet!");
+	        planet.damage();
+	        //TODO: and destroy the bullet
+	        game.bullets.splice(bulletIdx);
+	        // console.log(game.bullets);
+	      }
+	      if (bullet.pos[0] < 0 || bullet.pos[0] > 1600 ||
+	        bullet.pos[1] < 0 || bullet.pos[1] > 800) {
+	        game.bullets.splice(bulletIdx);
 	      }
 	    });
+	
+	    // console.log(planet, game.cat);
 	    if (game.cat.hitBy(planet)) {
 	      // TODO: end the game
 	      // game.over();
-	      alert("You lost!");
+	      game.cat.lives -= 1;
+	      // console.log(game.cat.lives);
 	    }
+	    this.sumPlanetLives += planet.lives;
 	  });
 	};
 	
@@ -144,6 +160,10 @@
 	  pos[0] = pos[0] % 1650;
 	  pos[1] = pos[1] % 850;
 	  return [pos[0], pos[1]];
+	};
+	
+	Game.prototype.remove = function(arr, itemIdx) {
+	  arr = arr.slice(0, itemIdx-1).concat(arr.slice(itemIdx));
 	};
 	
 	module.exports = Game;
@@ -161,15 +181,11 @@
 	  hash.color = hash.color || "#008000";
 	  hash.radius = hash.radius || 30;
 	  hash.vel = hash.vel || Util.randomVec(Math.random()*3 + 2);
-	  hash.lives = 3;
+	  hash.lives = this.lives || 3;
 	
 	  MovingObject.call(this, hash);
 	  this.wraps = true;
 	}
-	
-	Planet.prototype.hit = function() {
-	  this.lives -= 1;
-	};
 	
 	Util.inherits(Planet, MovingObject);
 	
@@ -207,7 +223,19 @@
 	    2 * Math.PI,
 	    false
 	  );
+	  if (this.lives > 0) {
+	    ctx.strokeStyle="red";
+	  } else {
+	    ctx.strokeStyle="green";
+	  }
 	  ctx.fill();
+	  var width = 3*this.lives;
+	  if (width > 0) {
+	    ctx.lineWidth=width;
+	  } else {
+	    ctx.lineWidth=0;
+	  }
+	  ctx.stroke();
 	};
 	
 	MovingObject.prototype.move = function() {
@@ -221,11 +249,18 @@
 	};
 	
 	MovingObject.prototype.hitBy = function(obj) {
+	
 	  var distance = Math.sqrt(
-	    Math.pow(this[0] - obj[0], 2) + Math.pow(this[0] - obj[0], 2)
+	    Math.pow(this.pos[0] - obj.pos[0], 2) + Math.pow(this.pos[1] - obj.pos[1], 2)
 	  );
 	  // console.log(distance, this.radius+obj.radius);
 	  return distance < (this.radius + obj.radius);
+	};
+	
+	MovingObject.prototype.damage = function() {
+	  if (this.lives > 0) {
+	    this.lives -= 1;
+	  }
 	};
 	
 	module.exports = MovingObject;
@@ -283,6 +318,9 @@
 	  options.pos = options.pos || [800, 400];
 	  options.vel = options.vel || [0.0, 0.0];
 	  options.rotation = options.rotation || 0;
+	  options.lives = options.lives || 3;
+	  // Solely for checking collisions:
+	  options.radius = 20;
 	
 	  MovingObject.call(this, options);
 	  this.wraps = true;
@@ -353,7 +391,6 @@
 	  var velocity = [Bullet.SPEED * (Math.cos(this.rotation)), Bullet.SPEED *(Math.sin(this.rotation))];
 	  var pos = this.pos.slice(0);
 	  var spacecat = this;
-	  console.log(this.pos, velocity, this.game);
 	  var bullet = new Bullet({
 	    pos: pos,
 	    vel: velocity,
@@ -706,8 +743,8 @@
 	    game.cat.movements();
 	    game.cat.rotations();
 	    var refresh = function() {
-	      game.logCollisions();
 	      game.moveObjects();
+	      game.logCollisions();
 	      game.draw(ctx);
 	      game.cat.draw(ctx);
 	    };

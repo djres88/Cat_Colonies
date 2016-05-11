@@ -5,6 +5,8 @@ function Game() {
   this.DIM_X = 1600;
   this.DIM_Y = 800;
   this.NUM_ASTEROIDS = 5;
+  this.won = false;
+  this.sumPlanetLives = this.NUM_ASTEROIDS*3;
   this.planets = [];
   this.bullets = [];
   this.cat = new SpaceCat({game: this});
@@ -23,6 +25,10 @@ Game.prototype.addBullet = function(bullet) {
 };
 
 Game.prototype.draw = function (ctx) {
+  if (game.won) {
+
+  }
+
   ctx.clearRect(0, 0, this.DIM_X, this.DIM_Y);
   this.planets.forEach(function(planet) {
     planet.draw(ctx);
@@ -51,19 +57,29 @@ Game.prototype.randomPosition = function() {
 
 Game.prototype.logCollisions = function() {
   var game = this;
-  game.planets.forEach(function(planet) {
-    game.bullets.forEach(function(bullet) {
+  this.sumPlanetLives = 0;
+  game.planets.forEach(function(planet, planetIdx) {
+    game.bullets.forEach(function(bullet, bulletIdx) {
       if (planet.hitBy(bullet)) {
-        // TODO:
-        // planet.assessDamage();
-        alert("Bullet struck planet!");
+        planet.damage();
+        //TODO: and destroy the bullet
+        game.bullets.splice(bulletIdx);
+        // console.log(game.bullets);
+      }
+      if (bullet.pos[0] < 0 || bullet.pos[0] > 1600 ||
+        bullet.pos[1] < 0 || bullet.pos[1] > 800) {
+        game.bullets.splice(bulletIdx);
       }
     });
+
+    // console.log(planet, game.cat);
     if (game.cat.hitBy(planet)) {
       // TODO: end the game
       // game.over();
-      alert("You lost!");
+      game.cat.lives -= 1;
+      // console.log(game.cat.lives);
     }
+    this.sumPlanetLives += planet.lives;
   });
 };
 
@@ -77,6 +93,10 @@ Game.prototype.wrap = function (pos) {
   pos[0] = pos[0] % 1650;
   pos[1] = pos[1] % 850;
   return [pos[0], pos[1]];
+};
+
+Game.prototype.remove = function(arr, itemIdx) {
+  arr = arr.slice(0, itemIdx-1).concat(arr.slice(itemIdx));
 };
 
 module.exports = Game;

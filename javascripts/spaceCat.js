@@ -7,6 +7,9 @@ function SpaceCat(options) {
   options.pos = options.pos || [800, 400];
   options.vel = options.vel || [0.0, 0.0];
   options.rotation = options.rotation || 0;
+  options.lives = options.lives || 3;
+  // Solely for checking collisions:
+  options.radius = 20;
 
   MovingObject.call(this, options);
   this.wraps = true;
@@ -77,7 +80,6 @@ SpaceCat.prototype.fire = function() {
   var velocity = [Bullet.SPEED * (Math.cos(this.rotation)), Bullet.SPEED *(Math.sin(this.rotation))];
   var pos = this.pos.slice(0);
   var spacecat = this;
-  console.log(this.pos, velocity, this.game);
   var bullet = new Bullet({
     pos: pos,
     vel: velocity,
