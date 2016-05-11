@@ -10,6 +10,7 @@ var newGame = new GameView();
 newGame.start(canvasEl);
 
 function resetGame() {
+  location.reload();
   var canvasEl = document.getElementById("game-canvas");
   canvasEl.width = 1600;
   canvasEl.height = 800;

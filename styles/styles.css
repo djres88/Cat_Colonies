@@ -91,7 +91,7 @@ h1 {
   display: none;
 }
 
-
 .controls ul {
+  font-size: 14px;
   list-style-type: none;
 }

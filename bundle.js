@@ -56,6 +56,7 @@
 	newGame.start(canvasEl);
 	
 	function resetGame() {
+	  location.reload();
 	  var canvasEl = document.getElementById("game-canvas");
 	  canvasEl.width = 1600;
 	  canvasEl.height = 800;
@@ -100,7 +101,7 @@
 	function Game() {
 	  this.DIM_X = 1600;
 	  this.DIM_Y = 800;
-	  this.NUM_PLANETS = 1;
+	  this.NUM_PLANETS = 4;
 	  this.won = false;
 	  this.planetsConquered = 0;
 	  this.planets = [];
@@ -202,7 +203,7 @@
 	    document.getElementsByClassName("status-messages")[0].style.display="block";
 	    document.getElementById("game-won-message").style.display="block";
 	  } else if (this.cat.lives === 0) {
-	    document.getElementById("game-won-message").style.display="block";
+	    document.getElementById("game-lost-message").style.display="block";
 	    document.getElementsByClassName("status-messages")[0].style.display="block";
 	  } else {
 	    return;
