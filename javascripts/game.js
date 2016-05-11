@@ -4,7 +4,7 @@ var SpaceCat = require('./spaceCat.js');
 function Game() {
   this.DIM_X = 1600;
   this.DIM_Y = 800;
-  this.NUM_PLANETS = 2;
+  this.NUM_PLANETS = 1;
   this.won = false;
   this.planetsConquered = 0;
   this.planets = [];
@@ -25,18 +25,18 @@ Game.prototype.addBullet = function(bullet) {
 };
 
 Game.prototype.draw = function (ctx) {
-  // if (game.won) {
-  //
-  // }
+  if (this.over()) {
+    return;
+  } else {
+    ctx.clearRect(0, 0, this.DIM_X, this.DIM_Y);
+    this.planets.forEach(function(planet) {
+      planet.draw(ctx);
+    });
 
-  ctx.clearRect(0, 0, this.DIM_X, this.DIM_Y);
-  this.planets.forEach(function(planet) {
-    planet.draw(ctx);
-  });
-
-  this.bullets.forEach(function(bullet) {
-    bullet.draw(ctx);
-  });
+    this.bullets.forEach(function(bullet) {
+      bullet.draw(ctx);
+    });
+  }
 };
 
 Game.prototype.moveObjects = function () {
@@ -103,9 +103,11 @@ Game.prototype.wrap = function (pos) {
 
 Game.prototype.over = function(ctx) {
   if (this.planetsConquered === this.NUM_PLANETS) {
-    console.log("WON");
+    document.getElementsByClassName("status-messages")[0].style.display="block";
+    document.getElementById("game-won-message").style.display="block";
   } else if (this.cat.lives === 0) {
-    ctx.fillText("YAY", 10, 10);
+    document.getElementById("game-won-message").style.display="block";
+    document.getElementsByClassName("status-messages")[0].style.display="block";
   } else {
     return;
   }

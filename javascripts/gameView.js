@@ -21,5 +21,3 @@ GameView.prototype.start = function (canvasEl) {
 };
 
 module.exports = GameView;
-
-window.Game = Game;

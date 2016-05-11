@@ -2,12 +2,20 @@ var Game = require("./javascripts/game.js");
 var GameView = require("./javascripts/gameView.js");
 var M = require("./javascripts/movingObject.js");
 
+
 var canvasEl = document.getElementById("game-canvas");
 canvasEl.width = 1600;
 canvasEl.height = 800;
-
 var newGame = new GameView();
 newGame.start(canvasEl);
+
+function resetGame() {
+  var canvasEl = document.getElementById("game-canvas");
+  canvasEl.width = 1600;
+  canvasEl.height = 800;
+  var newGame = new GameView();
+  newGame.start(canvasEl);
+}
 
 function showInstructions() {
   document.getElementById("show-instructions").style.display="block";
@@ -19,9 +27,18 @@ function hideInstuctions() {
 
 document.getElementById("how-to-play").onclick=showInstructions;
 
-document.getElementById("exit-instructions").onclick=hideInstuctions;
+var exits = document.getElementsByClassName("exit");
+for (var i = 0; i < exits.length; i++) {
+  exits[i].onclick=hideInstuctions;
+}
 
-window.game = Game;
-window.gameview = GameView;
-window.m = M;
-window.n = newGame;
+var buttons = document.getElementsByTagName("button");
+for (var i = 0; i < buttons.length; i++) {
+  buttons[i].onclick=resetGame;
+}
+
+// startGame();
+// window.game = Game;
+// window.gameview = GameView;
+// window.m = M;
+// window.n = newGame;

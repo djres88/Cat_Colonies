@@ -48,12 +48,20 @@
 	var GameView = __webpack_require__(8);
 	var M = __webpack_require__(3);
 	
+	
 	var canvasEl = document.getElementById("game-canvas");
 	canvasEl.width = 1600;
 	canvasEl.height = 800;
-	
 	var newGame = new GameView();
 	newGame.start(canvasEl);
+	
+	function resetGame() {
+	  var canvasEl = document.getElementById("game-canvas");
+	  canvasEl.width = 1600;
+	  canvasEl.height = 800;
+	  var newGame = new GameView();
+	  newGame.start(canvasEl);
+	}
 	
 	function showInstructions() {
 	  document.getElementById("show-instructions").style.display="block";
@@ -65,12 +73,21 @@
 	
 	document.getElementById("how-to-play").onclick=showInstructions;
 	
-	document.getElementById("exit-instructions").onclick=hideInstuctions;
+	var exits = document.getElementsByClassName("exit");
+	for (var i = 0; i < exits.length; i++) {
+	  exits[i].onclick=hideInstuctions;
+	}
 	
-	window.game = Game;
-	window.gameview = GameView;
-	window.m = M;
-	window.n = newGame;
+	var buttons = document.getElementsByTagName("button");
+	for (var i = 0; i < buttons.length; i++) {
+	  buttons[i].onclick=resetGame;
+	}
+	
+	// startGame();
+	// window.game = Game;
+	// window.gameview = GameView;
+	// window.m = M;
+	// window.n = newGame;
 
 
 /***/ },
@@ -83,7 +100,7 @@
 	function Game() {
 	  this.DIM_X = 1600;
 	  this.DIM_Y = 800;
-	  this.NUM_PLANETS = 2;
+	  this.NUM_PLANETS = 1;
 	  this.won = false;
 	  this.planetsConquered = 0;
 	  this.planets = [];
@@ -104,18 +121,18 @@
 	};
 	
 	Game.prototype.draw = function (ctx) {
-	  // if (game.won) {
-	  //
-	  // }
+	  if (this.over()) {
+	    return;
+	  } else {
+	    ctx.clearRect(0, 0, this.DIM_X, this.DIM_Y);
+	    this.planets.forEach(function(planet) {
+	      planet.draw(ctx);
+	    });
 	
-	  ctx.clearRect(0, 0, this.DIM_X, this.DIM_Y);
-	  this.planets.forEach(function(planet) {
-	    planet.draw(ctx);
-	  });
-	
-	  this.bullets.forEach(function(bullet) {
-	    bullet.draw(ctx);
-	  });
+	    this.bullets.forEach(function(bullet) {
+	      bullet.draw(ctx);
+	    });
+	  }
 	};
 	
 	Game.prototype.moveObjects = function () {
@@ -182,9 +199,11 @@
 	
 	Game.prototype.over = function(ctx) {
 	  if (this.planetsConquered === this.NUM_PLANETS) {
-	    console.log("WON");
+	    document.getElementsByClassName("status-messages")[0].style.display="block";
+	    document.getElementById("game-won-message").style.display="block";
 	  } else if (this.cat.lives === 0) {
-	    ctx.fillText("YAY", 10, 10);
+	    document.getElementById("game-won-message").style.display="block";
+	    document.getElementsByClassName("status-messages")[0].style.display="block";
 	  } else {
 	    return;
 	  }
@@ -784,8 +803,6 @@
 	};
 	
 	module.exports = GameView;
-	
-	window.Game = Game;
 
 
 /***/ }
