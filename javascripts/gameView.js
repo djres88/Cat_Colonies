@@ -10,6 +10,7 @@ GameView.prototype.start = function (canvasEl) {
     game.cat.movements();
     game.cat.rotations();
     var refresh = function() {
+      game.logCollisions();
       game.moveObjects();
       game.draw(ctx);
       game.cat.draw(ctx);

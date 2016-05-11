@@ -49,6 +49,24 @@ Game.prototype.randomPosition = function() {
   return [x, y];
 };
 
+Game.prototype.logCollisions = function() {
+  var game = this;
+  game.planets.forEach(function(planet) {
+    game.bullets.forEach(function(bullet) {
+      if (planet.hitBy(bullet)) {
+        // TODO:
+        // planet.assessDamage();
+        alert("Bullet struck planet!");
+      }
+    });
+    if (game.cat.hitBy(planet)) {
+      // TODO: end the game
+      // game.over();
+      alert("You lost!");
+    }
+  });
+};
+
 Game.prototype.wrap = function (pos) {
   if (pos[0] <= -50) {
     pos[0] += 1650;

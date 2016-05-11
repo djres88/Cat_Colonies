@@ -116,6 +116,24 @@
 	  return [x, y];
 	};
 	
+	Game.prototype.logCollisions = function() {
+	  var game = this;
+	  game.planets.forEach(function(planet) {
+	    game.bullets.forEach(function(bullet) {
+	      if (planet.hitBy(bullet)) {
+	        // TODO:
+	        // planet.assessDamage();
+	        alert("Bullet struck planet!");
+	      }
+	    });
+	    if (game.cat.hitBy(planet)) {
+	      // TODO: end the game
+	      // game.over();
+	      alert("You lost!");
+	    }
+	  });
+	};
+	
 	Game.prototype.wrap = function (pos) {
 	  if (pos[0] <= -50) {
 	    pos[0] += 1650;
@@ -141,7 +159,7 @@
 	
 	function Planet(hash) {
 	  hash.color = hash.color || "#008000";
-	  hash.radius = hash.radius || 20;
+	  hash.radius = hash.radius || 30;
 	  hash.vel = hash.vel || Util.randomVec(Math.random()*3 + 2);
 	  hash.lives = 3;
 	
@@ -197,7 +215,17 @@
 	  this.pos[1] += this.vel[1];
 	  if (this.wraps) {
 	    this.game.wrap(this.pos);
+	  } else {
+	    // TODO: remove bullets (don't want to track them)
 	  }
+	};
+	
+	MovingObject.prototype.hitBy = function(obj) {
+	  var distance = Math.sqrt(
+	    Math.pow(this[0] - obj[0], 2) + Math.pow(this[0] - obj[0], 2)
+	  );
+	  // console.log(distance, this.radius+obj.radius);
+	  return distance < (this.radius + obj.radius);
 	};
 	
 	module.exports = MovingObject;
@@ -316,7 +344,7 @@
 	  var rotate = this.rotation;
 	  ctx.translate(this.pos[0], this.pos[1]);
 	  ctx.rotate(rotate);
-	  ctx.drawImage(img,-25,-25,40,40);
+	  ctx.drawImage(img,-25,-25,50,50);
 	  ctx.rotate(-rotate);
 	  ctx.translate(-this.pos[0], -this.pos[1]);
 	};
@@ -678,6 +706,7 @@
 	    game.cat.movements();
 	    game.cat.rotations();
 	    var refresh = function() {
+	      game.logCollisions();
 	      game.moveObjects();
 	      game.draw(ctx);
 	      game.cat.draw(ctx);

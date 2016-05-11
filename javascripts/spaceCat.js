@@ -68,7 +68,7 @@ SpaceCat.prototype.draw = function(ctx) {
   var rotate = this.rotation;
   ctx.translate(this.pos[0], this.pos[1]);
   ctx.rotate(rotate);
-  ctx.drawImage(img,-25,-25,40,40);
+  ctx.drawImage(img,-25,-25,50,50);
   ctx.rotate(-rotate);
   ctx.translate(-this.pos[0], -this.pos[1]);
 };
