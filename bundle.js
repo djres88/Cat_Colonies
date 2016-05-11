@@ -71,7 +71,7 @@
 	function Game() {
 	  this.DIM_X = 1600;
 	  this.DIM_Y = 800;
-	  this.NUM_ASTEROIDS = 8;
+	  this.NUM_ASTEROIDS = 5;
 	  this.planets = [];
 	  this.cat = new SpaceCat({game: this});
 	  this.addPlanets();
@@ -130,7 +130,7 @@
 	
 	function Planet(hash) {
 	  hash.color = hash.color || "#008000";
-	  hash.radius = hash.radius || 30;
+	  hash.radius = hash.radius || 20;
 	  hash.vel = hash.vel || Util.randomVec(Math.random()*3 + 2);
 	  hash.lives = 3;
 	
@@ -165,7 +165,7 @@
 	  }
 	}
 	
-	MovingObject.prototype.draw = function(ctx) {  
+	MovingObject.prototype.draw = function(ctx) {
 	  ctx.fillStyle = this.color;
 	  ctx.beginPath();
 	
@@ -248,14 +248,14 @@
 	Util.inherits(SpaceCat, MovingObject);
 	
 	SpaceCat.prototype.go = function(direction) {
-	  this.vel[0] += direction[0]*(Math.round(Math.cos(this.rotation)));
-	  this.vel[1] += direction[1]*(Math.round(Math.sin(this.rotation)));
+	  this.vel[0] += direction[0]*(Math.cos(this.rotation));
+	  this.vel[1] += direction[1]*(Math.sin(this.rotation));
 	
-	  if (Math.abs(this.vel[0]) >= 8) {
-	    this.vel[0] -= direction[0]*(this.rotation/Math.PI);
+	  if (Math.abs(this.vel[0]) >= 5) {
+	    this.vel[0] -= direction[0]*(Math.cos(this.rotation));
 	  }
-	  if (Math.abs(this.vel[1]) >= 8) {
-	    this.vel[1] -= direction[1]*(this.rotation/Math.PI);
+	  if (Math.abs(this.vel[1]) >= 5) {
+	    this.vel[1] -= direction[1]*(Math.sin(this.rotation));
 	    return;
 	  }
 	};
@@ -263,11 +263,8 @@
 	SpaceCat.prototype.movements = function() {
 	  var spacecat = this;
 	  var MOVES = {
-	    //TODO: change to dynamically go back/fwd based on this.rotation
 	    "up": [1, 1],
 	    "down": [-1, -1]
-	    // "left": [-1, 0],
-	    // "right": [1, 0]
 	  };
 	  Object.keys(MOVES).forEach(function(keypress) {
 	    var direction = MOVES[keypress];
@@ -278,11 +275,9 @@
 	};
 	
 	SpaceCat.prototype.rotations = function() {
-	  // ctx.drawImage(img,this.pos[0],this.pos[1], 50, 50);
-	
 	  var ROTATIONS = {
-	    "left": 7,
-	    "right": 1
+	    "left": 350,
+	    "right": 10
 	  };
 	
 	  var spacecat = this;
@@ -290,7 +285,7 @@
 	
 	    var direction = ROTATIONS[keypress];
 	    key(keypress, function() {
-	      spacecat.rotation += (direction*Math.PI/4);
+	      spacecat.rotation += (direction*(Math.PI/180));
 	      spacecat.rotation %= (Math.PI*2);
 	      console.log(spacecat.rotation);
 	    });
@@ -301,8 +296,8 @@
 	  var img = document.getElementById("space-cat");
 	  var rotate = this.rotation;
 	  ctx.translate(this.pos[0], this.pos[1]);
-	  ctx.rotate(rotate); // rotate
-	  ctx.drawImage(img,-25,-25,50,50); // draws a chain link or dagger
+	  ctx.rotate(rotate); 
+	  ctx.drawImage(img,-25,-25,50,50);
 	  ctx.rotate(-rotate);
 	  ctx.translate(-this.pos[0], -this.pos[1]);
 	};
@@ -638,14 +633,13 @@
 	    };
 	
 	
-	    setInterval(refresh, 20);
+	    setInterval(refresh, 10);
 	};
 	
 	
 	module.exports = GameView;
 	
 	window.Game = Game;
-	// window.movingObject = movingObject;
 
 
 /***/ }

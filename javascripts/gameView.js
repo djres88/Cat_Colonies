@@ -18,11 +18,10 @@ GameView.prototype.start = function (canvasEl) {
     };
 
 
-    setInterval(refresh, 20);
+    setInterval(refresh, 10);
 };
 
 
 module.exports = GameView;
 
 window.Game = Game;
-// window.movingObject = movingObject;

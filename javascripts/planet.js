@@ -4,7 +4,7 @@ var Util = require("./util.js");
 
 function Planet(hash) {
   hash.color = hash.color || "#008000";
-  hash.radius = hash.radius || 30;
+  hash.radius = hash.radius || 20;
   hash.vel = hash.vel || Util.randomVec(Math.random()*3 + 2);
   hash.lives = 3;
 

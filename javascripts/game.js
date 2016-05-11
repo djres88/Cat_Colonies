@@ -4,7 +4,7 @@ var SpaceCat = require('./spaceCat.js');
 function Game() {
   this.DIM_X = 1600;
   this.DIM_Y = 800;
-  this.NUM_ASTEROIDS = 8;
+  this.NUM_ASTEROIDS = 5;
   this.planets = [];
   this.cat = new SpaceCat({game: this});
   this.addPlanets();
