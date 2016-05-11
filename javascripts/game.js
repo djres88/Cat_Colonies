@@ -6,6 +6,7 @@ function Game() {
   this.DIM_Y = 800;
   this.NUM_ASTEROIDS = 5;
   this.planets = [];
+  this.bullets = [];
   this.cat = new SpaceCat({game: this});
   this.addPlanets();
 }
@@ -17,17 +18,27 @@ Game.prototype.addPlanets = function() {
   }
 };
 
+Game.prototype.addBullet = function(bullet) {
+  this.bullets.push(bullet);
+};
+
 Game.prototype.draw = function (ctx) {
   ctx.clearRect(0, 0, this.DIM_X, this.DIM_Y);
+  this.planets.forEach(function(planet) {
+    planet.draw(ctx);
+  });
 
-  this.planets.forEach(function(asteroid) {
-    asteroid.draw(ctx);
+  this.bullets.forEach(function(bullet) {
+    bullet.draw(ctx);
   });
 };
 
 Game.prototype.moveObjects = function () {
-  this.planets.forEach(function(asteroid) {
-    asteroid.move();
+  this.planets.forEach(function(planet) {
+    planet.move();
+  });
+  this.bullets.forEach(function(bullet) {
+    bullet.move();
   });
   this.cat.move();
 };

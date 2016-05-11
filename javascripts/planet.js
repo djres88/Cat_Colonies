@@ -9,6 +9,7 @@ function Planet(hash) {
   hash.lives = 3;
 
   MovingObject.call(this, hash);
+  this.wraps = true;
 }
 
 Planet.prototype.hit = function() {

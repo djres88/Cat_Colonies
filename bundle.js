@@ -45,7 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Game = __webpack_require__(1);
-	var GameView = __webpack_require__(7);
+	var GameView = __webpack_require__(8);
 	var M = __webpack_require__(3);
 	
 	var canvasEl = document.getElementById("game-canvas");
@@ -73,6 +73,7 @@
 	  this.DIM_Y = 800;
 	  this.NUM_ASTEROIDS = 5;
 	  this.planets = [];
+	  this.bullets = [];
 	  this.cat = new SpaceCat({game: this});
 	  this.addPlanets();
 	}
@@ -84,17 +85,27 @@
 	  }
 	};
 	
+	Game.prototype.addBullet = function(bullet) {
+	  this.bullets.push(bullet);
+	};
+	
 	Game.prototype.draw = function (ctx) {
 	  ctx.clearRect(0, 0, this.DIM_X, this.DIM_Y);
+	  this.planets.forEach(function(planet) {
+	    planet.draw(ctx);
+	  });
 	
-	  this.planets.forEach(function(asteroid) {
-	    asteroid.draw(ctx);
+	  this.bullets.forEach(function(bullet) {
+	    bullet.draw(ctx);
 	  });
 	};
 	
 	Game.prototype.moveObjects = function () {
-	  this.planets.forEach(function(asteroid) {
-	    asteroid.move();
+	  this.planets.forEach(function(planet) {
+	    planet.move();
+	  });
+	  this.bullets.forEach(function(bullet) {
+	    bullet.move();
 	  });
 	  this.cat.move();
 	};
@@ -135,6 +146,7 @@
 	  hash.lives = 3;
 	
 	  MovingObject.call(this, hash);
+	  this.wraps = true;
 	}
 	
 	Planet.prototype.hit = function() {
@@ -180,11 +192,12 @@
 	  ctx.fill();
 	};
 	
-	
 	MovingObject.prototype.move = function() {
 	  this.pos[0] += this.vel[0];
 	  this.pos[1] += this.vel[1];
-	  this.game.wrap(this.pos);
+	  if (this.wraps) {
+	    this.game.wrap(this.pos);
+	  }
 	};
 	
 	module.exports = MovingObject;
@@ -235,7 +248,8 @@
 
 	var MovingObject = __webpack_require__(3);
 	var Util = __webpack_require__(4);
-	var key = __webpack_require__(6);
+	var Bullet = __webpack_require__(6);
+	var key = __webpack_require__(7);
 	
 	function SpaceCat(options) {
 	  options.pos = options.pos || [800, 400];
@@ -243,6 +257,8 @@
 	  options.rotation = options.rotation || 0;
 	
 	  MovingObject.call(this, options);
+	  this.wraps = true;
+	
 	}
 	
 	Util.inherits(SpaceCat, MovingObject);
@@ -272,6 +288,10 @@
 	      spacecat.go(direction);
 	    });
 	  });
+	
+	  key('space', function() {
+	    spacecat.fire();
+	  });
 	};
 	
 	SpaceCat.prototype.rotations = function() {
@@ -287,7 +307,6 @@
 	    key(keypress, function() {
 	      spacecat.rotation += (direction*(Math.PI/180));
 	      spacecat.rotation %= (Math.PI*2);
-	      console.log(spacecat.rotation);
 	    });
 	  });
 	};
@@ -296,19 +315,53 @@
 	  var img = document.getElementById("space-cat");
 	  var rotate = this.rotation;
 	  ctx.translate(this.pos[0], this.pos[1]);
-	  ctx.rotate(rotate); 
-	  ctx.drawImage(img,-25,-25,50,50);
+	  ctx.rotate(rotate);
+	  ctx.drawImage(img,-25,-25,40,40);
 	  ctx.rotate(-rotate);
 	  ctx.translate(-this.pos[0], -this.pos[1]);
 	};
 	
+	SpaceCat.prototype.fire = function() {
+	  var velocity = [Bullet.SPEED * (Math.cos(this.rotation)), Bullet.SPEED *(Math.sin(this.rotation))];
+	  var pos = this.pos.slice(0);
+	  var spacecat = this;
+	  console.log(this.pos, velocity, this.game);
+	  var bullet = new Bullet({
+	    pos: pos,
+	    vel: velocity,
+	    game: this.game
+	  });
 	
+	  this.game.addBullet(bullet);
+	};
 	
 	module.exports = SpaceCat;
 
 
 /***/ },
 /* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Util = __webpack_require__(4);
+	var MovingObject = __webpack_require__(3);
+	var Planet = __webpack_require__(2);
+	
+	var Bullet = function(options) {
+	  options.radius = 3;
+	  options.color = "#FFFF66";
+	
+	  MovingObject.call(this, options);
+	};
+	
+	Bullet.SPEED = 6;
+	
+	Util.inherits(Bullet, MovingObject);
+	
+	module.exports = Bullet;
+
+
+/***/ },
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//     keymaster.js
@@ -610,18 +663,16 @@
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Game = __webpack_require__(1);
 	
 	function GameView() {
-	
 	}
 	
 	GameView.prototype.start = function (canvasEl) {
 	    var ctx = canvasEl.getContext("2d");
-	
 	
 	    var game = new Game();
 	    game.cat.movements();
@@ -632,10 +683,8 @@
 	      game.cat.draw(ctx);
 	    };
 	
-	
 	    setInterval(refresh, 10);
 	};
-	
 	
 	module.exports = GameView;
 	

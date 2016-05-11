@@ -28,11 +28,12 @@ MovingObject.prototype.draw = function(ctx) {
   ctx.fill();
 };
 
-
 MovingObject.prototype.move = function() {
   this.pos[0] += this.vel[0];
   this.pos[1] += this.vel[1];
-  this.game.wrap(this.pos);
+  if (this.wraps) {
+    this.game.wrap(this.pos);
+  }
 };
 
 module.exports = MovingObject;

@@ -1,5 +1,6 @@
 var MovingObject = require('./movingObject');
 var Util = require('./util');
+var Bullet = require('./bullet');
 var key = require('../keymaster.js');
 
 function SpaceCat(options) {
@@ -8,6 +9,8 @@ function SpaceCat(options) {
   options.rotation = options.rotation || 0;
 
   MovingObject.call(this, options);
+  this.wraps = true;
+
 }
 
 Util.inherits(SpaceCat, MovingObject);
@@ -37,6 +40,10 @@ SpaceCat.prototype.movements = function() {
       spacecat.go(direction);
     });
   });
+
+  key('space', function() {
+    spacecat.fire();
+  });
 };
 
 SpaceCat.prototype.rotations = function() {
@@ -52,7 +59,6 @@ SpaceCat.prototype.rotations = function() {
     key(keypress, function() {
       spacecat.rotation += (direction*(Math.PI/180));
       spacecat.rotation %= (Math.PI*2);
-      console.log(spacecat.rotation);
     });
   });
 };
@@ -61,12 +67,24 @@ SpaceCat.prototype.draw = function(ctx) {
   var img = document.getElementById("space-cat");
   var rotate = this.rotation;
   ctx.translate(this.pos[0], this.pos[1]);
-  ctx.rotate(rotate); 
-  ctx.drawImage(img,-25,-25,50,50);
+  ctx.rotate(rotate);
+  ctx.drawImage(img,-25,-25,40,40);
   ctx.rotate(-rotate);
   ctx.translate(-this.pos[0], -this.pos[1]);
 };
 
+SpaceCat.prototype.fire = function() {
+  var velocity = [Bullet.SPEED * (Math.cos(this.rotation)), Bullet.SPEED *(Math.sin(this.rotation))];
+  var pos = this.pos.slice(0);
+  var spacecat = this;
+  console.log(this.pos, velocity, this.game);
+  var bullet = new Bullet({
+    pos: pos,
+    vel: velocity,
+    game: this.game
+  });
 
+  this.game.addBullet(bullet);
+};
 
 module.exports = SpaceCat;

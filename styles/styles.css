@@ -31,3 +31,8 @@ h1 {
   margin: 0 8%;
   display: none;
 }
+
+.header-information {
+  display: flex;
+  justify-content: space-around;
+}

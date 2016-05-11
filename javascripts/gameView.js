@@ -1,12 +1,10 @@
 var Game = require('./game.js');
 
 function GameView() {
-
 }
 
 GameView.prototype.start = function (canvasEl) {
     var ctx = canvasEl.getContext("2d");
-
 
     var game = new Game();
     game.cat.movements();
@@ -17,10 +15,8 @@ GameView.prototype.start = function (canvasEl) {
       game.cat.draw(ctx);
     };
 
-
     setInterval(refresh, 10);
 };
-
 
 module.exports = GameView;
 

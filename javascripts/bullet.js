@@ -1,18 +1,16 @@
 var Util = require('./util');
 var MovingObject = require('./movingObject');
 var Planet = require('./planet');
-var SpaceCat = require('./SpaceCat');
 
 var Bullet = function(options) {
-  options.radius = Bullet.RADIUS;
-  options.vel = Bullet.SPEED;
-  options.color = Bullet.COLOR;
-  options.pos = SpaceCat.pos;
+  options.radius = 3;
+  options.color = "#FFFF66";
 
   MovingObject.call(this, options);
 };
 
+Bullet.SPEED = 6;
+
 Util.inherits(Bullet, MovingObject);
 
-
-Bullet.RADIUS
+module.exports = Bullet;
