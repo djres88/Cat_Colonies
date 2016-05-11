@@ -9,6 +9,18 @@ canvasEl.height = 800;
 var newGame = new GameView();
 newGame.start(canvasEl);
 
+function showInstructions() {
+  document.getElementById("show-instructions").style.display="block";
+}
+
+function hideInstuctions() {
+  document.getElementById("show-instructions").style.display="none";
+}
+
+document.getElementById("how-to-play").onclick=showInstructions;
+
+document.getElementById("exit-instructions").onclick=hideInstuctions;
+
 window.game = Game;
 window.gameview = GameView;
 window.m = M;

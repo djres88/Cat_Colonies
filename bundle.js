@@ -55,6 +55,18 @@
 	var newGame = new GameView();
 	newGame.start(canvasEl);
 	
+	function showInstructions() {
+	  document.getElementById("show-instructions").style.display="block";
+	}
+	
+	function hideInstuctions() {
+	  document.getElementById("show-instructions").style.display="none";
+	}
+	
+	document.getElementById("how-to-play").onclick=showInstructions;
+	
+	document.getElementById("exit-instructions").onclick=hideInstuctions;
+	
 	window.game = Game;
 	window.gameview = GameView;
 	window.m = M;
@@ -71,9 +83,9 @@
 	function Game() {
 	  this.DIM_X = 1600;
 	  this.DIM_Y = 800;
-	  this.NUM_ASTEROIDS = 5;
+	  this.NUM_PLANETS = 2;
 	  this.won = false;
-	  this.sumPlanetLives = this.NUM_ASTEROIDS*3;
+	  this.planetsConquered = 0;
 	  this.planets = [];
 	  this.bullets = [];
 	  this.cat = new SpaceCat({game: this});
@@ -81,7 +93,7 @@
 	}
 	
 	Game.prototype.addPlanets = function() {
-	  for (var i = 0; i < this.NUM_ASTEROIDS; i++) {
+	  for (var i = 0; i < this.NUM_PLANETS; i++) {
 	    var a = new Planet({pos: this.randomPosition(), game: this});
 	    this.planets.push(a);
 	  }
@@ -92,9 +104,9 @@
 	};
 	
 	Game.prototype.draw = function (ctx) {
-	  if (game.won) {
-	
-	  }
+	  // if (game.won) {
+	  //
+	  // }
 	
 	  ctx.clearRect(0, 0, this.DIM_X, this.DIM_Y);
 	  this.planets.forEach(function(planet) {
@@ -124,14 +136,13 @@
 	
 	Game.prototype.logCollisions = function() {
 	  var game = this;
-	  this.sumPlanetLives = 0;
+	  this.planetsConquered = 0;
+	  var planetsConquered = this.planetsConquered;
 	  game.planets.forEach(function(planet, planetIdx) {
 	    game.bullets.forEach(function(bullet, bulletIdx) {
 	      if (planet.hitBy(bullet)) {
 	        planet.damage();
-	        //TODO: and destroy the bullet
 	        game.bullets.splice(bulletIdx);
-	        // console.log(game.bullets);
 	      }
 	      if (bullet.pos[0] < 0 || bullet.pos[0] > 1600 ||
 	        bullet.pos[1] < 0 || bullet.pos[1] > 800) {
@@ -141,13 +152,20 @@
 	
 	    // console.log(planet, game.cat);
 	    if (game.cat.hitBy(planet)) {
-	      // TODO: end the game
-	      // game.over();
-	      game.cat.lives -= 1;
-	      // console.log(game.cat.lives);
+	      if (planet.lives > 0) {
+	        game.cat.lives -= 1;
+	        // TODO: replace cat in center iff not in danger;
+	        // game.cat.respawn();
+	        // console.log(game.cat.lives);
+	      } else {
+	        planet.status = "conquered";
+	      }
 	    }
-	    this.sumPlanetLives += planet.lives;
+	    if (planet.status === "conquered") {
+	      planetsConquered += 1;
+	    }
 	  });
+	  this.planetsConquered = planetsConquered;
 	};
 	
 	Game.prototype.wrap = function (pos) {
@@ -162,8 +180,14 @@
 	  return [pos[0], pos[1]];
 	};
 	
-	Game.prototype.remove = function(arr, itemIdx) {
-	  arr = arr.slice(0, itemIdx-1).concat(arr.slice(itemIdx));
+	Game.prototype.over = function(ctx) {
+	  if (this.planetsConquered === this.NUM_PLANETS) {
+	    console.log("WON");
+	  } else if (this.cat.lives === 0) {
+	    ctx.fillText("YAY", 10, 10);
+	  } else {
+	    return;
+	  }
 	};
 	
 	module.exports = Game;
@@ -202,6 +226,7 @@
 	  this.game = hash.game;
 	  this.rotation = hash.rotation;
 	  this.lives = hash.lives;
+	  this.status = hash.status;
 	
 	  if (hash.radius) {
 	    this.radius = hash.radius;
@@ -212,6 +237,10 @@
 	}
 	
 	MovingObject.prototype.draw = function(ctx) {
+	  if (this.status === "conquered") {
+	    return;
+	  } else {
+	
 	  ctx.fillStyle = this.color;
 	  ctx.beginPath();
 	
@@ -236,6 +265,7 @@
 	    ctx.lineWidth=0;
 	  }
 	  ctx.stroke();
+	  }
 	};
 	
 	MovingObject.prototype.move = function() {
@@ -745,6 +775,7 @@
 	    var refresh = function() {
 	      game.moveObjects();
 	      game.logCollisions();
+	      game.over(ctx);
 	      game.draw(ctx);
 	      game.cat.draw(ctx);
 	    };

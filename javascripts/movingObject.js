@@ -4,6 +4,7 @@ function MovingObject(hash) {
   this.game = hash.game;
   this.rotation = hash.rotation;
   this.lives = hash.lives;
+  this.status = hash.status;
 
   if (hash.radius) {
     this.radius = hash.radius;
@@ -14,6 +15,10 @@ function MovingObject(hash) {
 }
 
 MovingObject.prototype.draw = function(ctx) {
+  if (this.status === "conquered") {
+    return;
+  } else {
+
   ctx.fillStyle = this.color;
   ctx.beginPath();
 
@@ -38,6 +43,7 @@ MovingObject.prototype.draw = function(ctx) {
     ctx.lineWidth=0;
   }
   ctx.stroke();
+  }
 };
 
 MovingObject.prototype.move = function() {

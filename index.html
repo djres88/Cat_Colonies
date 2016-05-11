@@ -11,14 +11,40 @@
       <div class="header-information">
         <p>Score</p>
         <h1>Cat Colonies</h1>
-        <p>How to Play</p>
+        <p id="how-to-play">How to Play</p>
+      </div>
+      <div id="show-instructions">
+        <p id="exit-instructions">X</p>
+        <h1>Instructions</h1>
+        <p>Welcome to Cat Colonies! It's like Asteroids meets Pacman, kinda. Your goal, as spacecat, is to conquer all the planets. Here's how: </p>
+          <ol>
+            <li> Use SPACE to fire lasers at the planets and break their shields. Each planet's shield is indicated in <span>RED</span>).</li>
+            <li>After three successful shots, the planet's shield breaks (the red border will get thinner). Now it's time to conquer the planet! You conquer an unshielded planet by navigating over it.</li>
+            <li> But be careful: you get hit by a planet with a still-active shield, you lose. </li>
+          </ol>
+      </div>
+      <div id="game-won-message">
+        <h1>You Win!</h1>
+      </div>
+      <div id="game-lost-message">
+        <h1>You Lost! :(</h1>
       </div>
       <img id="space-cat" src="./images/spacecat.png" alt="" />
       <canvas id="game-canvas">
       </canvas>
+      <div class="controls">
+        <ul>
+          <li>SPACE: Fire Lasers</li>
+          <li>LEFT/RIGHT ARROWS: Rotate Cat</li>
+          <li>FRONT/BACK ARROWS: Move Cat</li>
+        </ul>
+      </div>
     </div>
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js" >
+    </script>
     <script src="bundle.js">
     </script>
     <script src="keymaster.js"></script>
+
   </body>
 </html>
