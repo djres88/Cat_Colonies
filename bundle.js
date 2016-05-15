@@ -160,11 +160,11 @@
 	    game.bullets.forEach(function(bullet, bulletIdx) {
 	      if (planet.hitBy(bullet)) {
 	        planet.damage();
-	        game.bullets.splice(bulletIdx);
+	        game.bullets = game.bullets.slice(0, bulletIdx).concat(game.bullets.slice(bulletIdx+1, game.bullets.length));
 	      }
 	      if (bullet.pos[0] < 0 || bullet.pos[0] > 1600 ||
 	        bullet.pos[1] < 0 || bullet.pos[1] > 800) {
-	        game.bullets.splice(bulletIdx);
+	        game.bullets = game.bullets.slice(0, bulletIdx).concat(game.bullets.slice(bulletIdx+1, game.bullets.length));
 	      }
 	    });
 	
