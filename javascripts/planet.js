@@ -4,9 +4,9 @@ var Util = require("./util.js");
 
 function Planet(hash) {
   hash.color = hash.color || "#008000";
-  hash.radius = hash.radius || 30;
-  hash.vel = hash.vel || Util.randomVec(Math.random()*3 + 2);
   hash.lives = this.lives || 3;
+  hash.radius = hash.radius || 40;
+  hash.vel = hash.vel || Util.randomVec(Math.random()*3 + 2);
 
   MovingObject.call(this, hash);
   this.wraps = true;
@@ -37,15 +37,15 @@ Planet.prototype.draw = function(ctx, idx) {
         ctx.strokeStyle="black";
         break;
     }
-    var width = 3*this.lives;
+    var width = (2*this.lives)+ 2;
     if (width > 0) {
       ctx.lineWidth=width;
     } else {
       ctx.lineWidth=0.5;
     }
-    ctx.drawImage(img,-20,-20,75,75);
+    ctx.drawImage(img,-25,-40,76,76);
     ctx.beginPath();
-    ctx.arc(15,20,38,0,2*Math.PI);
+    ctx.arc(10,0,37,0,2*Math.PI);
     ctx.stroke();
     ctx.translate(-this.pos[0], -this.pos[1]);
   }
