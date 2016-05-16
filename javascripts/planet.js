@@ -43,9 +43,9 @@ Planet.prototype.draw = function(ctx, idx) {
     } else {
       ctx.lineWidth=0.5;
     }
-    ctx.drawImage(img,-25,-40,76,76);
+    ctx.drawImage(img,-40,-40,76,76);
     ctx.beginPath();
-    ctx.arc(10,0,37,0,2*Math.PI);
+    ctx.arc(0,0,37,0,2*Math.PI);
     ctx.stroke();
     ctx.translate(-this.pos[0], -this.pos[1]);
   }
