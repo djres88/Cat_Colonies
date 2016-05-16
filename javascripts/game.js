@@ -29,8 +29,8 @@ Game.prototype.draw = function (ctx) {
     return;
   } else {
     ctx.clearRect(0, 0, this.DIM_X, this.DIM_Y);
-    this.planets.forEach(function(planet) {
-      planet.draw(ctx);
+    this.planets.forEach(function(planet, idx) {
+      planet.draw(ctx, idx+1);
     });
 
     this.bullets.forEach(function(bullet) {

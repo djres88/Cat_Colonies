@@ -32,6 +32,10 @@ h1 {
   display: none;
 }
 
+.planets-off-canvas {
+  display: none;
+}
+
 .header-information {
   display: flex;
   justify-content: space-around;

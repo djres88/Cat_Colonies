@@ -51,8 +51,8 @@ SpaceCat.prototype.movements = function() {
 
 SpaceCat.prototype.rotations = function() {
   var ROTATIONS = {
-    "left": 350,
-    "right": 10
+    "left": 345,
+    "right": 15
   };
 
   var spacecat = this;

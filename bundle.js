@@ -126,8 +126,8 @@
 	    return;
 	  } else {
 	    ctx.clearRect(0, 0, this.DIM_X, this.DIM_Y);
-	    this.planets.forEach(function(planet) {
-	      planet.draw(ctx);
+	    this.planets.forEach(function(planet, idx) {
+	      planet.draw(ctx, idx+1);
 	    });
 	
 	    this.bullets.forEach(function(bullet) {
@@ -232,6 +232,44 @@
 	}
 	
 	Util.inherits(Planet, MovingObject);
+	
+	Planet.prototype.draw = function(ctx, idx) {
+	  if (this.status === "conquered") {
+	    return;
+	  } else {
+	
+	    var imgFileName = "planet-" + idx;
+	    var img = document.getElementById(imgFileName);
+	
+	    ctx.translate(this.pos[0], this.pos[1]);
+	    switch (this.lives) {
+	      case 3:
+	        ctx.strokeStyle="red";
+	        break;
+	      case 2:
+	        ctx.strokeStyle="orange";
+	        break;
+	      case 1:
+	        ctx.strokeStyle="yellow";
+	        break;
+	      case 0:
+	        ctx.strokeStyle="black";
+	        break;
+	    }
+	    var width = 3*this.lives;
+	    if (width > 0) {
+	      ctx.lineWidth=width;
+	    } else {
+	      ctx.lineWidth=0.5;
+	    }
+	    ctx.drawImage(img,-20,-20,75,75);
+	    ctx.beginPath();
+	    ctx.arc(15,20,38,0,2*Math.PI);
+	    ctx.stroke();
+	    ctx.translate(-this.pos[0], -this.pos[1]);
+	  }
+	
+	};
 	
 	module.exports = Planet;
 
@@ -342,7 +380,7 @@
 	    randomizeX = 1;
 	  }
 	  if (randomizeY <= 0.5) {
-	    randomizeX = -1;
+	    randomizeY = -1;
 	  } else {
 	    randomizeY = 1;
 	  }
@@ -412,8 +450,8 @@
 	
 	SpaceCat.prototype.rotations = function() {
 	  var ROTATIONS = {
-	    "left": 350,
-	    "right": 10
+	    "left": 345,
+	    "right": 15
 	  };
 	
 	  var spacecat = this;

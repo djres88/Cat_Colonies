@@ -20,7 +20,7 @@ util.randomVec = function (length) {
     randomizeX = 1;
   }
   if (randomizeY <= 0.5) {
-    randomizeX = -1;
+    randomizeY = -1;
   } else {
     randomizeY = 1;
   }
