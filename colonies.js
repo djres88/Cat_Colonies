@@ -1,21 +1,24 @@
 var Game = require("./javascripts/game.js");
 var GameView = require("./javascripts/gameView.js");
 var M = require("./javascripts/movingObject.js");
+var key = require('./keymaster.js');
 
+key('enter', function() {
+  startGame();
+});
 
-var canvasEl = document.getElementById("game-canvas");
-canvasEl.width = 1600;
-canvasEl.height = 800;
-var newGame = new GameView();
-newGame.start(canvasEl);
-
-function resetGame() {
-  location.reload();
+function startGame() {
+  hideInstuctions();
   var canvasEl = document.getElementById("game-canvas");
   canvasEl.width = 1600;
   canvasEl.height = 800;
   var newGame = new GameView();
-  newGame.start(canvasEl);
+  var game = new Game();
+  newGame.start(canvasEl, game);
+}
+
+function resetGame() {
+  location.reload();
 }
 
 function showInstructions() {
@@ -28,15 +31,20 @@ function hideInstuctions() {
 
 document.getElementById("how-to-play").onclick=showInstructions;
 
+
+// Add click listeners:
 var exits = document.getElementsByClassName("exit");
 for (var i = 0; i < exits.length; i++) {
   exits[i].onclick=hideInstuctions;
 }
 
-var buttons = document.getElementsByTagName("button");
-for (var i = 0; i < buttons.length; i++) {
-  buttons[i].onclick=resetGame;
+var btnPlayAgain = document.getElementsByClassName("btn-play-again");
+for (var i = 0; i < btnPlayAgain.length; i++) {
+  btnPlayAgain[i].onclick=resetGame;
 }
+
+var btnStart = document.getElementById("btn-start");
+btnStart.onclick=startGame;
 
 // startGame();
 // window.game = Game;

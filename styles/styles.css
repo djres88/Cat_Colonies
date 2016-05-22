@@ -3,6 +3,20 @@ body {
   font-family: fantasy;
 }
 
+h1 {
+  margin: 0;
+}
+
+button {
+  cursor: pointer;
+  background: MidnightBlue;
+  color: white;
+  font-size: 20px;
+  font-family: fantasy;
+  padding: 5px;
+  border: 1px solid yellow;
+}
+
 .game {
   display: flex;
   justify-content: center;
@@ -11,8 +25,13 @@ body {
   color: white;
 }
 
-h1 {
-  margin: 0;
+.planets-off-canvas {
+  display: none;
+}
+
+.header-information {
+  display: flex;
+  justify-content: space-around;
 }
 
 #game-canvas {
@@ -32,29 +51,32 @@ h1 {
   display: none;
 }
 
-.planets-off-canvas {
-  display: none;
-}
-
-.header-information {
-  display: flex;
-  justify-content: space-around;
-}
-
 #how-to-play {
   cursor: pointer;
 }
 
 #show-instructions {
-  display: none;
+  display: block;
+  width: 60%;
+  min-width: 800px;
   z-index: 1000;
   background-color: black;
   opacity: 0.8;
   border: 1px solid white;
   text-align: left;
   position: absolute;
-  margin: 5% 10%;
-  padding: 0% 5%;
+  left: 0;
+  right: 0;
+  margin: 5% auto;
+  padding: 2% 2%;
+}
+
+#show-instructions h1 {
+  text-align: center;
+}
+
+#show-instructions button {
+  min-width: 200px;
 }
 
 .exit {
@@ -80,18 +102,18 @@ h1 {
   background-color: black;
   opacity: 0.8;
   border: 1px solid white;
-  margin: 150px auto;
+  margin: 10% auto;
   left: 0;
   right: 0;
 }
 
 #game-won-message {
-  padding-top: 100px;
+  padding-top: 50px;
   display: none;
 }
 
 #game-lost-message {
-  padding-top: 100px;
+  padding-top: 50px;
   display: none;
 }
 

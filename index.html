@@ -16,22 +16,29 @@
       <div id="show-instructions">
         <p class="exit">X</p>
         <h1>Instructions</h1>
-        <p>Welcome to Cat Colonies! It's like Asteroids meets Pacman, kinda. Your goal, as spacecat, is to conquer all the planets. Here's how: </p>
+          <p>
+            Hey, SpaceCat! Capture the alien planets by breaking their shields (indicated by the planet's rings)!
+          </p>
+          <p>
+            Three shots break a planet's shield. But be careful: If you get hit by a shielded planet, you lose!
+          </p>
           <ol>
-            <li> Use SPACE to fire lasers at the planets and break their shields. Each planet's shield is indicated in <span>RED</span>).</li>
-            <li>After three successful shots, the planet's shield breaks (the red border will get thinner). Now it's time to conquer the planet! You conquer an unshielded planet by navigating over it.</li>
-            <li> But be careful: you get hit by a planet with a still-active shield, you lose. </li>
+            <li> UP/DOWN arrows: move forward/back
+            <li> LEFT/RIGHT arrows: rotate SpaceCat</li>
+            <li> SPACE: fire lasers at the planets.</li>
           </ol>
-        <button>Let's Play!</button>
+         <h2><button id="btn-start">Let's Play!</button>&nbsp;&nbsp; or press "Enter"</h2>
       </div>
       <div class="status-messages">
         <div id="game-won-message">
           <h1>You Win!</h1>
-          <button>Play Again</button>
+          <button class="btn-play-again">Play Again</button>
+          <h2>press "Enter"</h2>
         </div>
         <div id="game-lost-message">
           <h1>You Lost! :(</h1>
-          <button>Play Again</button>
+          <button class="btn-play-again">Play Again</button>
+          <h2>press "Enter"</h2>
         </div>
       </div>
 

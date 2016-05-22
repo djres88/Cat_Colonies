@@ -47,21 +47,24 @@
 	var Game = __webpack_require__(1);
 	var GameView = __webpack_require__(8);
 	var M = __webpack_require__(3);
+	var key = __webpack_require__(7);
 	
+	key('enter', function() {
+	  startGame();
+	});
 	
-	var canvasEl = document.getElementById("game-canvas");
-	canvasEl.width = 1600;
-	canvasEl.height = 800;
-	var newGame = new GameView();
-	newGame.start(canvasEl);
-	
-	function resetGame() {
-	  location.reload();
+	function startGame() {
+	  hideInstuctions();
 	  var canvasEl = document.getElementById("game-canvas");
 	  canvasEl.width = 1600;
 	  canvasEl.height = 800;
 	  var newGame = new GameView();
-	  newGame.start(canvasEl);
+	  var game = new Game();
+	  newGame.start(canvasEl, game);
+	}
+	
+	function resetGame() {
+	  location.reload();
 	}
 	
 	function showInstructions() {
@@ -74,15 +77,20 @@
 	
 	document.getElementById("how-to-play").onclick=showInstructions;
 	
+	
+	// Add click listeners:
 	var exits = document.getElementsByClassName("exit");
 	for (var i = 0; i < exits.length; i++) {
 	  exits[i].onclick=hideInstuctions;
 	}
 	
-	var buttons = document.getElementsByTagName("button");
-	for (var i = 0; i < buttons.length; i++) {
-	  buttons[i].onclick=resetGame;
+	var btnPlayAgain = document.getElementsByClassName("btn-play-again");
+	for (var i = 0; i < btnPlayAgain.length; i++) {
+	  btnPlayAgain[i].onclick=resetGame;
 	}
+	
+	var btnStart = document.getElementById("btn-start");
+	btnStart.onclick=startGame;
 	
 	// startGame();
 	// window.game = Game;
@@ -202,9 +210,15 @@
 	  if (this.planetsConquered === this.NUM_PLANETS) {
 	    document.getElementsByClassName("status-messages")[0].style.display="block";
 	    document.getElementById("game-won-message").style.display="block";
+	    key('enter', function() {
+	      location.reload();
+	    });
 	  } else if (this.cat.lives === 0) {
 	    document.getElementById("game-lost-message").style.display="block";
 	    document.getElementsByClassName("status-messages")[0].style.display="block";
+	    key('enter', function() {
+	      location.reload();
+	    });
 	  } else {
 	    return;
 	  }
@@ -332,7 +346,6 @@
 	  if (this.wraps) {
 	    this.game.wrap(this.pos);
 	  } else {
-	    // TODO: remove bullets (don't want to track them)
 	  }
 	};
 	
@@ -341,7 +354,6 @@
 	  var distance = Math.sqrt(
 	    Math.pow(this.pos[0] - obj.pos[0], 2) + Math.pow(this.pos[1] - obj.pos[1], 2)
 	  );
-	  // console.log(distance, this.radius+obj.radius);
 	  return distance < (this.radius + obj.radius);
 	};
 	
@@ -820,26 +832,45 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Game = __webpack_require__(1);
-	
+	var key = __webpack_require__(7);
 	function GameView() {
 	}
 	
-	GameView.prototype.start = function (canvasEl) {
-	    var ctx = canvasEl.getContext("2d");
+	GameView.prototype.start = function (canvasEl, game) {
+	  key.unbind('enter');
+	  var ctx = canvasEl.getContext("2d");
 	
-	    var game = new Game();
-	    game.cat.movements();
-	    game.cat.rotations();
-	    var refresh = function() {
-	      game.moveObjects();
-	      game.logCollisions();
-	      game.over(ctx);
-	      game.draw(ctx);
-	      game.cat.draw(ctx);
-	    };
+	  game.cat.movements();
+	  game.cat.rotations();
 	
+	  // Set objects in motion for a couple seconds w/o checking for collisions. Gives user a chance before losing.
+	  var initialState = setInterval(function() {
+	    game.moveObjects();
+	    game.draw(ctx);
+	    game.cat.draw(ctx);
+	  }, 10);
+	
+	  // Normal game logic. Note only difference is presence of logCollisions and game.over checking.
+	  var refresh = function() {
+	    game.moveObjects();
+	    game.logCollisions();
+	    game.over(ctx);
+	    game.draw(ctx);
+	    game.cat.draw(ctx);
+	  };
+	
+	  //After 1.5 seconds, switch from initial logic to normal game logic.
+	  setTimeout(function() {
+	    clearInterval(initialState);
 	    setInterval(refresh, 10);
+	  }, 1500);
+	
 	};
+	
+	// GameView.prototype.end = function (canvasEl) {
+	//   var ctx = canvasEl.getContext("2d");
+	//   ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+	// };
 	
 	module.exports = GameView;
 

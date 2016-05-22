@@ -52,7 +52,6 @@ MovingObject.prototype.move = function() {
   if (this.wraps) {
     this.game.wrap(this.pos);
   } else {
-    // TODO: remove bullets (don't want to track them)
   }
 };
 
@@ -61,7 +60,6 @@ MovingObject.prototype.hitBy = function(obj) {
   var distance = Math.sqrt(
     Math.pow(this.pos[0] - obj.pos[0], 2) + Math.pow(this.pos[1] - obj.pos[1], 2)
   );
-  // console.log(distance, this.radius+obj.radius);
   return distance < (this.radius + obj.radius);
 };
 

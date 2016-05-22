@@ -105,9 +105,15 @@ Game.prototype.over = function(ctx) {
   if (this.planetsConquered === this.NUM_PLANETS) {
     document.getElementsByClassName("status-messages")[0].style.display="block";
     document.getElementById("game-won-message").style.display="block";
+    key('enter', function() {
+      location.reload();
+    });
   } else if (this.cat.lives === 0) {
     document.getElementById("game-lost-message").style.display="block";
     document.getElementsByClassName("status-messages")[0].style.display="block";
+    key('enter', function() {
+      location.reload();
+    });
   } else {
     return;
   }
